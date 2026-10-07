@@ -1,0 +1,8 @@
+.hero-section {
+    background: linear-gradient(135deg, #ffffff, #e7f1ff);
+}
+
+.hero-image {
+    width: 200px;
+    height: auto;
+}
