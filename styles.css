@@ -6,3 +6,15 @@
     width: 200px;
     height: auto;
 }
+
+/* refer: chevron: https://icons.getbootstrap.com/icons/chevron-down/ */
+/* refer: aria-expanded: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-expanded */
+/* fefer: rotate: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/transform-function/rotate */
+button[aria-expanded="true"] .bi-chevron-down {
+    transform: rotate(180deg);
+}
+
+.bi-chevron-down {
+    display: inline-block;
+    transition: transform 0.2s ease;
+}

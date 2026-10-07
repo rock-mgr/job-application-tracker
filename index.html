@@ -54,7 +54,8 @@
                 </div>
 
                 <div class="col-md-5 text-center">
-                    <img src="images/img_briefcase_cropped.jpg" alt="Job application and briefcase illustration" class="hero-image">
+                    <img src="images/img_briefcase_cropped.jpg" alt="Job application and briefcase illustration"
+                        class="hero-image">
                 </div>
 
             </div>
@@ -231,45 +232,91 @@
                     <div class="card mb-3">
                         <div class="card-body">
 
-                            <div class="d-flex justify-content-between align-items-start">
+                            <!-- Always visible -->
+                            <div class="d-flex justify-content-between align-items-center">
+
                                 <div>
                                     <h3 class="h5 mb-1">TechNova</h3>
-                                    <p class="text-muted mb-2">QA Engineer</p>
+                                    <p class="text-muted mb-0">QA Engineer</p>
                                 </div>
-                                <span class="badge text-bg-primary">Applied</span>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <div class="text-end">
+                                        <span class="badge text-bg-primary">Applied</span>
+                                        <small class="d-block text-muted mt-1">01 Oct 2026</small>
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#applicationDetails1" aria-expanded="false" aria-controls="applicationDetails1">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+
+                                </div>
+
                             </div>
 
-                            <p class="mb-2"><strong>Applied:</strong> 01 Oct 2026</p>
+                            <!-- Expandable Details -->
+                            <div class="collapse mt-3" id="applicationDetails1">
+                                <hr>
 
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="offcanvas"
-                                    data-bs-target="#editApplicationOffcanvas">Edit</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                <p class="mb-2"><strong>Interview Date::&nbsp;</strong> -</p>
+
+                                <p class="mb-2"><strong>Job Link:&nbsp;</strong><a href="#">View Job</a></p>
+
+                                <p class="mb-3"><strong>Notes::&nbsp;</strong> No notes added.</p>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#editApplicationOffcanvas">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+
                             </div>
 
                         </div>
                     </div>
 
-
                     <!-- Sample Application 2 -->
                     <div class="card mb-3">
                         <div class="card-body">
 
-                            <div class="d-flex justify-content-between align-items-start">
+                            <!-- Always visible -->
+                            <div class="d-flex justify-content-between align-items-center">
+
                                 <div>
                                     <h3 class="h5 mb-1">CloudWorks</h3>
-                                    <p class="text-muted mb-2">Software Engineer</p>
+                                    <p class="text-muted mb-0">Software Engineer</p>
                                 </div>
-                                <span class="badge text-bg-success">Interview</span>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <div class="text-end">
+                                        <span class="badge text-bg-success">Interview</span>
+                                        <small class="d-block text-muted mt-1">28 Sep 2026</small>
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#applicationDetails2" aria-expanded="false" aria-controls="applicationDetails2">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+
+                                </div>
+
                             </div>
 
-                            <p class="mb-1"><strong>Applied:</strong> 28 Sep 2026</p>
-                            <p class="mb-2"><strong>Interview:</strong> 08 Oct 2026</p>
+                            <!-- Expandable Details -->
+                            <div class="collapse mt-3" id="applicationDetails2">
+                                <hr>
 
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="offcanvas"
-                                    data-bs-target="#editApplicationOffcanvas">Edit</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                <p class="mb-2"><strong>Interview Date:&nbsp;</strong> 08 Oct 2026</p>
+
+                                <p class="mb-2"><strong>Job Link:&nbsp;</strong><a href="#">View Job</a></p>
+
+                                <p class="mb-3"><strong>Notes:&nbsp;</strong> Prepare for technical interview.</p>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#editApplicationOffcanvas">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+
                             </div>
 
                         </div>
