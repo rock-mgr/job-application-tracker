@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="col-md-5 text-center">
-                    <img src="images/img_briefcase_cropped.jpg" alt="Job application and briefcase illustration"
+                    <img src="images/img_jobtrack_hero.png" alt="Job application and briefcase illustration"
                         class="hero-image">
                 </div>
 
@@ -363,7 +363,7 @@
                             <!-- Interview Date -->
                             <div class="col-md-6">
                                 <label for="interviewDate" class="form-label">Interview Date</label>
-                                <input type="date" class="form-control" id="interviewDate" name="interviewDate" />
+                                <input type="date" class="form-control" id="interviewDate" name="interviewDate" min="1900-01-01" max="2100-12-31" />
                             </div>
 
                             <!-- Position -->
@@ -393,14 +393,13 @@
                             <!-- Notes -->
                             <div class="col-md-6">
                                 <label for="notes" class="form-label">Notes (Optional)</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="3">
-                            </textarea>
+                                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                             </div>
 
                             <!-- Applied Date -->
                             <div class="col-md-6">
                                 <label for="appliedDate" class="form-label">Applied Date</label>
-                                <input type="date" class="form-control" id="appliedDate" name="appliedDate" required />
+                                <input type="date" class="form-control" id="appliedDate" name="appliedDate" min="1900-01-01" max="2100-12-31" required />
                             </div>
 
                         </div>
@@ -461,13 +460,13 @@
                 <!-- Applied Date -->
                 <div class="mb-3">
                     <label for="editAppliedDate" class="form-label">Applied Date</label>
-                    <input type="date" class="form-control" id="editAppliedDate" name="editAppliedDate" required />
+                    <input type="date" class="form-control" id="editAppliedDate" name="editAppliedDate" min="1900-01-01" max="2100-12-31" required />
                 </div>
 
                 <!-- Interview Date -->
                 <div class="mb-3">
                     <label for="editInterviewDate" class="form-label">Interview Date</label>
-                    <input type="date" class="form-control" id="editInterviewDate" name="editInterviewDate" />
+                    <input type="date" class="form-control" id="editInterviewDate" name="editInterviewDate"  min="1900-01-01" max="2100-12-31" />
                 </div>
 
                 <!-- Job Link -->
@@ -495,6 +494,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Application Scripts -->
+    <script src="data.js"></script>
     <script src="script.js"></script>
 
     <!-- Footer section-->
