@@ -15,6 +15,41 @@ function formatDate(dateString) {
     });
 }
 
+// Update dashboard 
+function updateDashboard() {
+    document.querySelector("#totalApplications").innerText = applications.length;
+
+    let totalOffers = applications.filter(function (application) {
+        return application.status === "Offer";
+    }).length;
+
+    document.querySelector("#totalOffers").innerText = totalOffers;
+
+    let totalRejected = applications.filter(function (application) {
+        return application.status === "Rejected";
+    }).length;
+
+    document.querySelector("#totalRejected").innerText = totalRejected;
+
+    // To match with our application - YYYY-MM-DD format
+    let now = new Date();
+    let today = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+    ].join("-");
+
+    // Interviews > equal today date is counted
+    // those past date is not counted
+    let upcomingInterviews = applications.filter(function (application) {
+        return application.status === "Interview" &&
+            application.interviewDate &&
+            application.interviewDate >= today;
+    }).length;
+
+    document.querySelector("#upcomingInterviews").innerText = upcomingInterviews;
+}
+
 // To display the applications 
 function displayApplications() {
     let applicationList = document.querySelector("#applicationList");
@@ -52,6 +87,28 @@ function displayApplications() {
 
         applicationList.appendChild(row);
 
+        let editButton = row.querySelector(".btn-outline-primary");
+
+        // refer: https://getbootstrap.com/docs/5.3/components/offcanvas/
+        // Edit button clicked event
+        editButton.addEventListener("click", function () {
+            let editOffcanvas = new bootstrap.Offcanvas(
+                document.querySelector("#editApplicationOffcanvas")
+            );
+
+            editingApplicationId = application.id;
+
+            document.querySelector("#editCompany").value = application.company;
+            document.querySelector("#editPosition").value = application.position;
+            document.querySelector("#editStatus").value = application.status;
+            document.querySelector("#editAppliedDate").value = application.appliedDate;
+            document.querySelector("#editInterviewDate").value = application.interviewDate;
+            document.querySelector("#editJobLink").value = application.jobLink;
+            document.querySelector("#editNotes").value = application.notes;
+
+            editOffcanvas.show();
+        });
+
         let deleteButton = row.querySelector(".btn-outline-danger");
 
         // Delete button clicked event
@@ -73,11 +130,13 @@ function displayApplications() {
         // End of delete click event
 
     }
+    updateDashboard();
 }
 
+let editingApplicationId = null;
 displayApplications();
 
-
+// Delete function to remove application by id
 function deleteApplication(id) {
     applications = applications.filter(function (application) {
         return application.id !== id;
@@ -89,6 +148,7 @@ function deleteApplication(id) {
 // Handle Add Application form submission
 let applicationForm = document.querySelector("#applicationForm");
 
+// Submit button - adding applications
 applicationForm.addEventListener("submit", function (event) {
     event.preventDefault();
     let company = document.querySelector("#company").value.trim();
@@ -141,4 +201,57 @@ applicationForm.addEventListener("submit", function (event) {
         timer: 2000,
         showConfirmButton: false
     });
+});
+
+// Handle Edit Application form submission
+let editApplicationForm = document.querySelector("#editApplicationForm");
+
+// Submit edited application event
+editApplicationForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    let application = applications.find(function (application) {
+        return application.id === editingApplicationId;
+    });
+
+    // Check valid dates
+    let appliedDate = document.querySelector("#editAppliedDate").value;
+    let interviewDate = document.querySelector("#editInterviewDate").value;
+
+    if (interviewDate && interviewDate < appliedDate) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid Interview Date",
+            text: "Interview date cannot be earlier than the applied date."
+        });
+        return;
+    }
+
+    // Update the selected application
+    application.company = document.querySelector("#editCompany").value.trim();
+    application.position = document.querySelector("#editPosition").value.trim();
+    application.status = document.querySelector("#editStatus").value;
+    application.appliedDate = document.querySelector("#editAppliedDate").value;
+    application.interviewDate = document.querySelector("#editInterviewDate").value;
+    application.jobLink = document.querySelector("#editJobLink").value.trim();
+    application.notes = document.querySelector("#editNotes").value.trim();
+
+    // Close the Edit offcanvas
+    let editOffcanvas = bootstrap.Offcanvas.getInstance(
+        document.querySelector("#editApplicationOffcanvas")
+    );
+
+    editOffcanvas.hide();
+
+    // Notify user that the application was updated
+    Swal.fire({
+        icon: "success",
+        title: "Application Updated!",
+        text: `${application.company} has been updated successfully.`,
+        timer: 2000,
+        showConfirmButton: false
+    });
+
+    // Refresh the applications table
+    displayApplications();
 });
