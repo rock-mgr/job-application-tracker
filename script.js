@@ -55,7 +55,152 @@ function displayApplications() {
     let applicationList = document.querySelector("#applicationList");
     applicationList.innerHTML = "";
 
-    for (let application of applications) {
+    // Mobile responsive
+    let mobileApplicationList = document.querySelector("#mobileApplicationList");
+    mobileApplicationList.innerHTML = "";
+
+    // This will copy another set without making changes - no parameter in slice()
+    let displayedApplications = applications.slice();
+    let sortBy = document.querySelector("#sortBy").value;
+
+    // Check sort that match the options
+    // refer: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+    if (sortBy === "date-desc") {
+        displayedApplications.sort(function (a, b) {
+            if (a.appliedDate > b.appliedDate) {
+                return -1;
+            } else if (a.appliedDate < b.appliedDate) {
+                return 1;
+            }
+            return 0;
+        });
+    } else if (sortBy === "date-asc") {
+        displayedApplications.sort(function (a, b) {
+            if (a.appliedDate < b.appliedDate) {
+                return -1;
+            } else if (a.appliedDate > b.appliedDate) {
+                return 1;
+            }
+            return 0;
+        });
+    } else if (sortBy === "company-asc") {
+        displayedApplications.sort(function (a, b) {
+            if (a.company < b.company) {
+                return -1;
+            } else if (a.company > b.company) {
+                return 1;
+            }
+            return 0;
+        });
+    } else if (sortBy === "company-desc") {
+        displayedApplications.sort(function (a, b) {
+            if (a.company > b.company) {
+                return -1;
+            } else if (a.company < b.company) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    for (let application of displayedApplications) {
+        let searchText = document.querySelector("#searchInput").value.toLowerCase();
+        if (!application.company.toLowerCase().includes(searchText) &&
+            !application.position.toLowerCase().includes(searchText)) {
+            continue;
+        }
+
+        let selectedStatus = document.querySelector("#statusFilter").value;
+        if (selectedStatus !== "All" && application.status !== selectedStatus) {
+            continue;
+        }
+
+        // Create a mobile application card
+        let mobileCard = document.createElement("div");
+        mobileCard.className = "card mb-3";
+        mobileCard.innerHTML = `
+            <div class="card-body">
+                <h3 class="h5 mb-1">${application.company}</h3>
+                <p class="text-muted mb-1">${application.position}</p>
+                <p class="mb-0">Status: ${application.status}</p>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary mt-2"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#details${application.id}">
+                    View Details
+                </button>
+
+                <div class="collapse mt-3" id="details${application.id}">
+                    <hr>
+                    <p class="mb-2">
+                        <strong>Interview Date:</strong>
+                        ${formatDate(application.interviewDate)}
+                    </p>
+
+                    <p class="mb-2">
+                        <strong>Job Link:</strong>
+                        ${application.jobLink
+                ? `<a href="${application.jobLink}" target="_blank" rel="noopener noreferrer">View Job</a>`
+                : "Not provided"}
+                    </p>
+
+                    <p class="mb-2">
+                        <strong>Notes:</strong>
+                        ${application.notes || "No notes added"}
+                    </p>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="button" class="btn btn-sm btn-outline-primary mobile-edit">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </button>
+
+                        <button type="button" class="btn btn-sm btn-outline-danger mobile-delete">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        mobileApplicationList.appendChild(mobileCard);
+
+        // Mobile Edit button event
+        let mobileEditButton = mobileCard.querySelector(".mobile-edit");
+        mobileEditButton.addEventListener("click", function () {
+            editingApplicationId = application.id;
+
+            document.querySelector("#editCompany").value = application.company;
+            document.querySelector("#editPosition").value = application.position;
+            document.querySelector("#editStatus").value = application.status;
+            document.querySelector("#editAppliedDate").value = application.appliedDate;
+            document.querySelector("#editInterviewDate").value = application.interviewDate;
+            document.querySelector("#editJobLink").value = application.jobLink;
+            document.querySelector("#editNotes").value = application.notes;
+
+            let editOffcanvas = new bootstrap.Offcanvas(
+                document.querySelector("#editApplicationOffcanvas")
+            );
+
+            editOffcanvas.show();
+        });
+
+        // Mobile Delete button event
+        let mobileDeleteButton = mobileCard.querySelector(".mobile-delete");
+        mobileDeleteButton.addEventListener("click", function () {
+            Swal.fire({
+                title: "Delete Application?",
+                text: `Are you sure you want to delete ${application.company}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Delete",
+                cancelButtonText: "Cancel",
+                confirmButtonColor: "#dc3545"
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    deleteApplication(application.id);
+                }
+            });
+        });
+
         let row = document.createElement("tr");
         let badgeColor = "bg-secondary";
 
@@ -253,5 +398,29 @@ editApplicationForm.addEventListener("submit", function (event) {
     });
 
     // Refresh the applications table
+    displayApplications();
+});
+
+// Search applications via input field
+let searchInput = document.querySelector("#searchInput");
+
+// Search input event 
+searchInput.addEventListener("input", function () {
+    displayApplications();
+});
+
+// Status filter 
+let statusFilter = document.querySelector("#statusFilter");
+
+// Status filter select event
+statusFilter.addEventListener("change", function () {
+    displayApplications();
+});
+
+// Order sorting 
+let sortByInput = document.querySelector("#sortBy");
+
+// Sort selection event
+sortByInput.addEventListener("change", function () {
     displayApplications();
 });
