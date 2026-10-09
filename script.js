@@ -1,3 +1,4 @@
+
 // Format dates as DD MMM YYYY
 function formatDate(dateString) {
     // Check date and end format if not date
@@ -282,10 +283,23 @@ let editingApplicationId = null;
 displayApplications();
 
 // Delete function to remove application by id
-function deleteApplication(id) {
+async function deleteApplication(id) {
+
+    // Backup applications before deleting
+    let originalApplications = applications.slice();
+
     applications = applications.filter(function (application) {
         return application.id !== id;
     });
+
+    // Save deletion to JSONBin
+    try {
+        await saveApplications();
+    } catch (error) {
+        applications = originalApplications;
+        Swal.fire("Error", "Unable to delete application.", "error");
+        return;
+    }
 
     displayApplications();
 }
@@ -294,7 +308,7 @@ function deleteApplication(id) {
 let applicationForm = document.querySelector("#applicationForm");
 
 // Submit button - adding applications
-applicationForm.addEventListener("submit", function (event) {
+applicationForm.addEventListener("submit", async function (event) {
     event.preventDefault();
     let company = document.querySelector("#company").value.trim();
     let position = document.querySelector("#position").value.trim();
@@ -327,6 +341,16 @@ applicationForm.addEventListener("submit", function (event) {
     };
 
     applications.push(newApplication);
+
+    // Safe check to catch error when trying to add application
+    try {
+        await saveApplications();
+    } catch (error) {
+        applications.pop();
+        Swal.fire("Error", "Unable to save application.", "error");
+        return;
+    }
+
     displayApplications();
 
     // Close of bootstrap modal
@@ -352,7 +376,7 @@ applicationForm.addEventListener("submit", function (event) {
 let editApplicationForm = document.querySelector("#editApplicationForm");
 
 // Submit edited application event
-editApplicationForm.addEventListener("submit", function (event) {
+editApplicationForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     let application = applications.find(function (application) {
@@ -372,6 +396,15 @@ editApplicationForm.addEventListener("submit", function (event) {
         return;
     }
 
+    // Backup original application data
+    let originalCompany = application.company;
+    let originalPosition = application.position;
+    let originalStatus = application.status;
+    let originalAppliedDate = application.appliedDate;
+    let originalInterviewDate = application.interviewDate;
+    let originalJobLink = application.jobLink;
+    let originalNotes = application.notes;
+
     // Update the selected application
     application.company = document.querySelector("#editCompany").value.trim();
     application.position = document.querySelector("#editPosition").value.trim();
@@ -380,6 +413,21 @@ editApplicationForm.addEventListener("submit", function (event) {
     application.interviewDate = document.querySelector("#editInterviewDate").value;
     application.jobLink = document.querySelector("#editJobLink").value.trim();
     application.notes = document.querySelector("#editNotes").value.trim();
+
+    // Save edited application to JSONBin
+    try {
+        await saveApplications();
+    } catch (error) {
+        application.company = originalCompany;
+        application.position = originalPosition;
+        application.status = originalStatus;
+        application.appliedDate = originalAppliedDate;
+        application.interviewDate = originalInterviewDate;
+        application.jobLink = originalJobLink;
+        application.notes = originalNotes;
+        Swal.fire("Error", "Unable to update application.", "error");
+        return;
+    }
 
     // Close the Edit offcanvas
     let editOffcanvas = bootstrap.Offcanvas.getInstance(
@@ -424,3 +472,5 @@ let sortByInput = document.querySelector("#sortBy");
 sortByInput.addEventListener("change", function () {
     displayApplications();
 });
+
+
