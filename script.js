@@ -308,6 +308,14 @@ async function deleteApplication(id) {
     }
 
     displayApplications();
+
+    Swal.fire({
+        icon: "success",
+        title: "Application Deleted!",
+        text: "The application has been deleted successfully.",
+        timer: 1500,
+        showConfirmButton: false
+    });
 }
 
 // Handle Add Application form submission
