@@ -16,15 +16,21 @@ function formatDate(dateString) {
     });
 }
 
+function countOffers() {
+    return applications.filter(function (application) {
+        return application.status === "Offer";
+    }).length;
+}
+
+function displayOffers(total) {
+    document.querySelector("#totalOffers").innerText = total;
+}
+
 // Update dashboard 
 function updateDashboard() {
     document.querySelector("#totalApplications").innerText = applications.length;
 
-    let totalOffers = applications.filter(function (application) {
-        return application.status === "Offer";
-    }).length;
-
-    document.querySelector("#totalOffers").innerText = totalOffers;
+    displayOffers(countOffers());
 
     let totalRejected = applications.filter(function (application) {
         return application.status === "Rejected";
